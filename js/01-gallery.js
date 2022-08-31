@@ -32,16 +32,19 @@ function onContainerGalleryClick(e) {
     return;
   }
   const imageInstance = e.target.dataset.source;
+  const htmlMarkup = `<img src="${imageInstance}">`;
 
-  const instance = basicLightbox.create(`
-    <img src="${imageInstance}">
-`);
-
-  instance.show();
-
-  document.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape') {
-      instance.close();
-    }
+  const instance = basicLightbox.create(htmlMarkup, {
+    onShow: () => document.addEventListener('keydown', onCloseImage),
+    onClose: () => removeEventListener('keydown', onCloseImage),
   });
+  
+  instance.show();
+ 
+ function onCloseImage(e) {
+   if (e.key === 'Escape') {
+     instance.close();
+   }
+ }
 }
+ 
